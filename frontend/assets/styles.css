@@ -1,0 +1,49 @@
+:root {
+  --po-bg: #0b1220;
+}
+
+body {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 60%);
+}
+
+.navbar-brand {
+  letter-spacing: 0.2px;
+}
+
+.card {
+  border: 0;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+}
+
+.table thead th {
+  white-space: nowrap;
+}
+
+.mono {
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: #64748b;
+}
+
+.badge-soft {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.btn-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.sticky-summary {
+  position: sticky;
+  top: 1rem;
+}
+
