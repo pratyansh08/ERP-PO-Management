@@ -300,7 +300,10 @@ els.poForm.addEventListener("submit", async (ev) => {
 
   try {
     const created = await apiFetch("/purchase-orders", { method: "POST", body: payload });
-    showSuccess(`PO #${created.id} created successfully.`);
+    const ref = created.reference_no ? created.reference_no : `PO #${created.id}`;
+    const status = created.status || "DRAFT";
+    const total = created.total_amount ?? created.total;
+    showSuccess(`Created ${ref} (${status}). Total: ${formatMoney(total)}.`);
 
     // reset form
     els.vendorSelect.value = "";

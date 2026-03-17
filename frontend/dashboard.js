@@ -76,6 +76,15 @@ function escapeHtml(s) {
     .replaceAll("'", "&#039;");
 }
 
+const vendorsById = new Map();
+
+function statusClass(status) {
+  const s = String(status || "").toUpperCase();
+  if (s === "APPROVED") return "badge-status badge-status-approved";
+  if (s === "CANCELLED") return "badge-status badge-status-cancelled";
+  return "badge-status badge-status-draft";
+}
+
 function renderRows(pos) {
   els.tbody.innerHTML = "";
   if (!pos.length) {
@@ -84,12 +93,18 @@ function renderRows(pos) {
   }
 
   for (const po of pos) {
+    const vendorName = vendorsById.get(Number(po.vendor_id)) || `Vendor #${po.vendor_id}`;
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="mono">${po.reference_no || `PO#${po.id}`}</td>
       <td>${escapeHtml(fmtDate(po.created_at))}</td>
-      <td><span class="badge badge-soft">Vendor #${po.vendor_id}</span></td>
-      <td><span class="badge text-bg-light">${escapeHtml(po.status || "—")}</span></td>
+      <td>
+        <div class="fw-semibold">${escapeHtml(vendorName)}</div>
+        <div class="muted small">ID: ${po.vendor_id}</div>
+      </td>
+      <td>
+        <span class="badge ${statusClass(po.status)}">${escapeHtml(po.status || "DRAFT")}</span>
+      </td>
       <td class="text-end mono">${formatMoney(po.subtotal)}</td>
       <td class="text-end mono">${formatMoney(po.tax)}</td>
       <td class="text-end mono fw-semibold">${formatMoney(po.total_amount ?? po.total)}</td>
@@ -104,8 +119,12 @@ function renderRows(pos) {
 async function loadPOs() {
   clearError();
   clearInfo();
-  els.tbody.innerHTML = `<tr><td colspan="7" class="text-center muted py-4">Loading…</td></tr>`;
+  els.tbody.innerHTML = `<tr><td colspan="8" class="text-center muted py-4">Loading…</td></tr>`;
   try {
+    const vendors = await apiFetch("/vendors");
+    vendorsById.clear();
+    for (const v of vendors) vendorsById.set(Number(v.id), v.name);
+
     const pos = await apiFetch("/purchase-orders");
     renderRows(pos);
   } catch (e) {
@@ -125,7 +144,7 @@ function modalClearError() {
 }
 
 function renderPODetail(po) {
-  els.modalTitle.textContent = `PO #${po.id}`;
+  els.modalTitle.textContent = po.reference_no ? `${po.reference_no}` : `PO #${po.id}`;
   els.vendorName.textContent = po.vendor?.name || `Vendor #${po.vendor_id}`;
   const metaParts = [];
   if (po.vendor?.email) metaParts.push(po.vendor.email);
@@ -134,7 +153,7 @@ function renderPODetail(po) {
 
   els.subtotal.textContent = formatMoney(po.subtotal);
   els.tax.textContent = formatMoney(po.tax);
-  els.total.textContent = formatMoney(po.total);
+  els.total.textContent = formatMoney(po.total_amount ?? po.total);
 
   els.itemsTbody.innerHTML = "";
   for (const item of po.items || []) {

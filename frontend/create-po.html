@@ -8,6 +8,10 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
     <link rel="stylesheet" href="./assets/styles.css" />
   </head>
   <body>
@@ -15,8 +19,12 @@
       <div class="container">
         <a class="navbar-brand fw-semibold" href="./dashboard.html">PO System</a>
         <div class="ms-auto d-flex gap-2">
-          <a class="btn btn-outline-primary" id="btnLogin" href="#">Login with Google</a>
-          <button class="btn btn-outline-secondary d-none" id="btnLogout" type="button">Logout</button>
+          <a class="btn btn-outline-primary" id="btnLogin" href="#">
+            <i class="bi bi-google me-1"></i>Login
+          </a>
+          <button class="btn btn-outline-secondary d-none" id="btnLogout" type="button">
+            <i class="bi bi-box-arrow-right me-1"></i>Logout
+          </button>
           <a class="btn btn-outline-secondary" href="./dashboard.html">Dashboard</a>
         </div>
       </div>
@@ -51,7 +59,7 @@
                 <div class="d-flex align-items-center justify-content-between mb-2">
                   <div class="fw-semibold">Items</div>
                   <button type="button" id="btnAddRow" class="btn btn-outline-primary btn-sm">
-                    + Add row
+                    <i class="bi bi-plus-lg me-1"></i>Add row
                   </button>
                 </div>
 
@@ -119,10 +127,10 @@
         <td class="text-end mono fw-semibold line-total">0.00</td>
         <td class="text-end">
           <button type="button" class="btn btn-outline-primary btn-sm btn-icon gen-desc" title="Generate Description">
-            AI
+            <i class="bi bi-stars"></i>
           </button>
           <button type="button" class="btn btn-outline-danger btn-sm btn-icon remove-row" title="Remove">
-            &times;
+            <i class="bi bi-x-lg"></i>
           </button>
         </td>
       </tr>
